@@ -20,26 +20,7 @@ module Main
     options = Parser.parse(argv)
     result = {
       EXECUTABLE_NAME => executable_hash(options),
-      'languages' => [
-        {
-          'name' => 'swift',
-          'files' => '200 bla',
-          'keywordsTypes' => 'bla',
-          'keywordsFunctions' => 'bla',
-          'keywordsComplexity' => 'bla',
-          'keywordsPositive' => 'bla',
-          'keywordsNegative' => 'bla'
-        },
-        {
-          'name' => 'java',
-          'files' => '200 bla',
-          'keywordsTypes' => 'bla',
-          'keywordsFunctions' => 'bla',
-          'keywordsComplexity' => 'bla',
-          'keywordsPositive' => 'bla',
-          'keywordsNegative' => 'bla'
-        }
-      ]
+      'languages' => ShellAdapter.analyze(options)
     }
 
     puts JSON.pretty_generate(result)
