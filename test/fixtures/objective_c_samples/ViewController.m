@@ -96,7 +96,7 @@ typedef void (^CallbackBlock)();
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"editContact"]) {
         ((EditTableViewController *) segue.destinationViewController).database = self.database;
-    }else if ([segue.identifier isEqualToString:@"editContactesistente"]) {
+    } else if ([segue.identifier isEqualToString:@"editContactesistente"]) {
         ((EditTableViewController *) segue.destinationViewController).database = self.database;
         NSInteger index = [self.tablecontacts indexPathForSelectedRow].row;
         ((EditTableViewController *) segue.destinationViewController).Contact = self.contacts[index];

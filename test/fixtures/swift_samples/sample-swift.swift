@@ -3,6 +3,7 @@ import UIKit
 typealias SomeTypeAlias = Double  /* multiple line comment
 /* nested
 */ code mixed with comments are counted as comments.. nandrei?
+nandrei insure the counting is correct.
 */ enum SomeEnum {
     
 }

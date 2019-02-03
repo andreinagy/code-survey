@@ -1,6 +1,23 @@
 
 EXECUTABLE_NAME = 'code-survey'.freeze
 
+# Files
+
+def find_files(ignore_list, base_path, extension)
+  file_paths = []
+  Find.find(base_path) do |path|
+    ignore_matches = (ignore_list || []).select do |item|
+      path.include? item
+    end
+    should_ignore = ignore_matches.any?
+
+    file_paths << path if path =~ extension && !should_ignore
+  end
+  file_paths
+end
+
+# Find occurences in strings and hashes
+
 def regexp_value(line, keyword)
   regexp = Regexp.new(keyword)
   value = line =~ regexp ? 1 : 0

@@ -1,6 +1,6 @@
-SWIFT_LANGUAGE = {
-  name: 'Swift',
-  file_extension: 'swift',
+OBJC_LANGUAGE = {
+  name: 'Objective C',
+  file_extension: '(h|m)',
 
   comments: {
     line_single: '//',
@@ -13,7 +13,7 @@ SWIFT_LANGUAGE = {
   keywords_comments: {
     # keywords that denote good practices
     potentially_good: [
-      'MARK:'
+      '#pragma mark:'
     ],
 
     potentially_neutral: [
@@ -33,16 +33,16 @@ SWIFT_LANGUAGE = {
   keywords_code: {
     # keywords that denote architecture refinement
     types: [
-      'class ',
+      'implementation ',
       'struct ',
-      'enum ',
+      'NS_ENUM ',
       'protocol ',
-      'typealias '
+      'typedef '
     ],
 
     # keywords that denote structuring code
     functions: [
-      'func ',
+      '- \(.*\).*', # - (void)anyNumberOfCharacters
       '\{ \(' # closure with arguments.
     ],
 
@@ -58,14 +58,12 @@ SWIFT_LANGUAGE = {
 
     # keywords that denote good practices
     potentially_good: [
-      'init?\(',
-      'init() throws',
+      '_Nonnull',
+      'nonnull',
+      '_Nullable',
+      'nullable',
       'extension',
-      'forEach',
-      'map',
       ' in ', # fast enumerations and closures
-      'self\]', # weak and unowned
-      ' \?\? ', # nil coalescing operator
       'assert\(',
       'fatalError\('
     ],
@@ -77,9 +75,8 @@ SWIFT_LANGUAGE = {
 
     # keywords that denote bad practices
     potentially_bad: [
-      '! ', # force unwrap, downcasting
       ' shared', # singletons
-      'DispatchQueue.main', # uses delays to layout views?
+      'dispatch_', # uses delays to layout views?
     ]
   }
 }.freeze

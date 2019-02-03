@@ -1,15 +1,20 @@
 require 'find'
 require_relative 'languages/swift'
+require_relative 'languages/objc'
 require_relative 'helpers.rb'
 
 class ShellAdapter
   def self.analyze(options)
-    language = FilesParser.new(options.ignore_list,
-                               options.input_directory)
+    file_parser = FilesParser.new(options.ignore_list,
+                                  options.input_directory)
 
-    [SWIFT_LANGUAGE].map do |x|
-      language.analyze(x)
+    [
+      SWIFT_LANGUAGE,
+      OBJC_LANGUAGE
+    ].map do |x|
+      file_parser.analyze(x)
     end
+      .compact
   end
 end
 
@@ -22,26 +27,15 @@ class FilesParser
   end
 
   def analyze(language)
-    string = ".*\.#{language[:file_extension]}$"
-    extension = Regexp.new(string).freeze
+    extension = Regexp.new(".#{language[:file_extension]}$").freeze
     parse_files(find_files(@ignore_list, @input_directory, extension), language)
   end
 
-  def find_files(ignore_list, base_path, extension)
-    file_paths = []
-    Find.find(base_path) do |path|
-      ignore_matches = (ignore_list || []).select do |item|
-        path.include? item
-      end
-      should_ignore = ignore_matches.any?
-
-      file_paths << path if path =~ extension && !should_ignore
-    end
-    file_paths
-  end
-
   def parse_files(files, language)
+    return nil if files.empty?
+
     result = {
+      'name' => language[:name],
       'fileExtension' => language[:file_extension],
       'files' => files.count || 0
     }
@@ -58,19 +52,19 @@ class FilesParser
     comment_level = 0 # process comments in comments too, why not?
 
     # Lines that contain comments. Empty or not. Closing comment line is not handled as code further.
-    lines_comment = [] 
+    lines_comment = []
 
-     # Empty lines that are not included in comments.
+    # Empty lines that are not included in comments.
     lines_empty = []
 
-     # All lines that are not empty and not included in comments.
+    # All lines that are not empty and not included in comments.
     lines_code = []
 
     comment_single = Regexp.new(language[:comments][:line_single]).freeze
     comment_start = Regexp.new(language[:comments][:line_multi][:start]).freeze
 
     # this would crash for single line only languages?
-    comment_end = Regexp.new(language[:comments][:line_multi][:end]).freeze 
+    comment_end = Regexp.new(language[:comments][:line_multi][:end]).freeze
 
     File.open(file).each do |line|
       if line =~ EMPTY_LINE
@@ -103,14 +97,19 @@ class FilesParser
       lines_code.push(line)
     end
 
-    {
+    result = {
       'linesOfCode' => lines_code.count,
       'linesOfComments' => lines_comment.count,
-      'linesEmpty' => lines_empty.count,
-      'keywords_comments' => all_occurences_hash(lines_comment,
-                                                 language[:keywords_comments]),
-      'keywords_code' => all_occurences_hash(lines_code,
-                                             language[:keywords_code])
+      'linesEmpty' => lines_empty.count
     }
+    comments = all_occurences_hash(lines_comment,
+                                   language[:keywords_comments])
+    result['keywords_comments'] = comments unless comments.nil?
+
+    code = all_occurences_hash(lines_code,
+                               language[:keywords_code])
+    result['keywords_code'] = code unless code.nil?
+
+    result
   end
 end
