@@ -11,7 +11,27 @@ SWIFT_LANGUAGE = {
     }
   },
 
-  keywords: {
+  keywords_comments: {
+    # keywords that denote good practices
+    potentially_good: [
+      'MARK:'
+    ],
+
+    potentially_neutral: [
+      'improve'
+    ],
+
+    # keywords that denote bad practices
+    potentially_bad: [
+      'TODO',
+      'FIXME',
+      'TBD',
+      'HACK',
+      '!!!'
+    ]
+  },
+
+  keywords_code: {
     # keywords that denote architecture refinement
     types: [
       'class ',
@@ -32,11 +52,13 @@ SWIFT_LANGUAGE = {
       'if ',
       'guard ',
       'switch ',
-      ' ? ', # ternary operator
+      ' \? ', # ternary operator
     ],
 
+    # heavily oppinionated
+
     # keywords that denote good practices
-    good: [
+    potentially_good: [
       'init?\(',
       'init() throws',
       'extension',
@@ -44,20 +66,21 @@ SWIFT_LANGUAGE = {
       'map',
       ' in ', # fast enumerations and closures
       'self\]', # weak and unowned
-      ' ?? ',
+      ' \?\? ', # nil coalescing operator
       'assert\(',
       'fatalError\('
     ],
 
+    # keywords that are neither good or bad practice, but good to know about.
+    potentially_neutral: [
+      '@objc'
+    ],
+
     # keywords that denote bad practices
-    bad: [
+    potentially_bad: [
       '! ', # force unwrap, downcasting
       ' shared', # singletons
       'DispatchQueue.main', # uses delays to layout views?
-      'TODO',
-      'FIXME',
-      'TBD',
-      'HACK'
     ]
   }
 }.freeze

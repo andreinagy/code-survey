@@ -47,3 +47,14 @@ def mergedWithSumOfValues(hash_first, hash_second)
   end
   result.empty? ? nil : result
 end
+
+def all_occurences_hash(lines, keywords)
+  hashes = lines.map do |line|
+    occurences_hash(line, keywords)
+  end
+  result = {}
+  hashes.compact.each do |partial|
+    result = mergedWithSumOfValues(result, partial)
+  end
+  result.empty? ? nil : result
+end

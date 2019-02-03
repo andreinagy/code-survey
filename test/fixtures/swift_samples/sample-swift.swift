@@ -11,6 +11,10 @@ class SomeClass {
     
 }
 
+// MARK: Methods grouping
+
+// FIXME: something
+
 // Single line comment
 struct SomeStruct {
     

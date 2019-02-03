@@ -10,7 +10,7 @@ class ShellAdapter
     [SWIFT_LANGUAGE].map do |x|
       language.analyze(x)
     end
-      end
+  end
 end
 
 EMPTY_LINE = /\A\s*\Z/
@@ -42,7 +42,7 @@ class FilesParser
 
   def parse_files(files, language)
     result = {
-      'language_file_extension' => language[:file_extension],
+      'fileExtension' => language[:file_extension],
       'files' => files.count || 0
     }
 
@@ -50,22 +50,6 @@ class FilesParser
       partial = parse_file(file, language)
       result = mergedWithSumOfValues(result, partial)
     end
-    result
-  end
-
-  def occurences(lines, keywords)
-    hashes = lines.map do |line|
-      occurences_hash(line, keywords)
-    end
-    # puts '-----start-------'
-    # puts hashes
-    # result = hashes.inject { |memo, el| memo.merge(el) { |_k, old_v, new_v| old_v + new_v } }
-    result = {}
-    hashes.each do |partial|
-      result = mergedWithSumOfValues(result, partial)
-    end
-    puts result
-    puts '--------'
     result
   end
 
@@ -115,8 +99,9 @@ class FilesParser
     {
       'linesOfCode' => lines_code.count,
       'linesOfComments' => lines_comment.count,
-      'lines_empty' => lines_empty.count,
-      'keywords' => occurences(lines_code, language[:keywords])
+      'linesEmpty' => lines_empty.count,
+      'keywords_comments' => all_occurences_hash(lines_comment, language[:keywords_comments]),
+      'keywords_code' => all_occurences_hash(lines_code, language[:keywords_code])
     }
   end
 end
