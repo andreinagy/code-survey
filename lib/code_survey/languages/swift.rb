@@ -1,3 +1,4 @@
+# each string is searched in a line; multiple occurences of the same keyword are not found.
 SWIFT_LANGUAGE = {
   # nandrei this should be an array, for objC or c++, .h, .m, etc..
   file_extension: 'swift',

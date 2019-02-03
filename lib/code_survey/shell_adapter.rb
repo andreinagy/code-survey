@@ -44,75 +44,88 @@ class FilesParser
       'language_file_extension' => language[:file_extension],
       'files' => files.count || 0
     }
-    keys = %w[linesOfCode
-              linesOfComments
-              lines_empty
-              keywordsTypes
-              keywordsFunctions
-              keywordsComplexity
-              keywordsPositive
-              keywordsNegative]
-
-    keys.each do |key|
-      result[key] = 0
-    end
 
     files.each do |file|
       partial = parse_file(file, language)
-      keys.each do |key|
-        result[key] += partial[key] || 0
-      end
+      result = mergeSumShallowHashes(result, partial)
     end
     result
   end
 
-  def keywords_hash(keywords)
+  def occurences_hash(line, keywords)
     result = {}
-    keywords.map do |key, array|
+    keywords.map do |category, sub_hash|
       partial = {}
-      array.map do |item|
-        partial[item] = [] if partial[item].nil?
-        partial[item].push(Regexp.new(item))
-      end
-      result[key] = partial
-    end
-    result
-  end
-
-  def occurences_hash(line, keywords_hash)
-    result = {}
-    keywords_hash.map do |key, sub_hash|
-      partial = {}
-      sub_hash.map do |k, item|
-
+      sub_hash.map do |keyword, regex|
         # partial[k] = 0 if partial[k].nil?
-        value = line =~ value ? 1 : 0
-        partial[k] = value unless value == 0
+        regexp = Regexp.new(keyword)
+        value = line =~ regexp ? 1 : 0
+        partial[keyword] = value unless value.zero?
+        # puts "partial --------"
+        # puts regex
+        # puts line =~ regex
+        # puts value
+        # puts line
+        # puts keyword
+        # puts partial[keyword]
       end
-      result[key] = partial
+      result[category] = partial unless partial.empty?
     end
+    # puts "occurences_hash result"
+    # puts result
     result
   end
 
   #
   # This works only if there are no nested values.
-  #
+  # Needs same schema
   def mergeSumShallowHashes(h1, h2)
-    h1.merge(h2) { |key, oldval, newval| 
-      newval + oldval
-    }
+    result = {}
+    h1.each do |key, value|
+      # hash
+      if value.is_a?(::Hash) && h2[key].is_a?(::Hash)
+        result[key] = mergeSumShallowHashes(value, h2[key])
+      elsif value.is_a?(::Hash)
+        result[key] = value
+
+      #common values
+      elsif value.is_a?(Numeric) && h2[key].is_a?(Numeric)
+        result[key] = value + h2[key]
+      elsif h1[key].is_a?(Numeric)
+        result[key] = value
+      end
+    end
+
+    h2.each do |key, value|
+      # checked common items above.
+      if value.is_a?(::Hash)
+        result[key] = value
+      
+        #next values
+      elsif value.is_a?(Numeric) && !h1[key].is_a?(Numeric)
+        result[key] = value
+      end
+    end
+    result
   end
 
   def occurences(lines, keywords)
-    keywords_hash = keywords_hash(keywords)
     hashes = lines.map do |line|
-      occurences_hash(line, keywords_hash)
+      occurences_hash(line, keywords)
     end
-    puts "------------"
-    puts hashes
-    hashes.inject{|memo, el| memo.merge( el ){|k, old_v, new_v| old_v + new_v}}
+    # puts '-----start-------'
+    # puts hashes
+    # result = hashes.inject { |memo, el| memo.merge(el) { |_k, old_v, new_v| old_v + new_v } }
+    result = {}
+    hashes.each do |partial|
+      result = mergeSumShallowHashes(result, partial)
+    end
+    puts result
+    puts '--------'
+    result
   end
 
+  # nandrei how to break this up?
   def parse_file(file, language)
     comment_level = 0 # process comments in comments too, why not?
 
@@ -128,7 +141,7 @@ class FilesParser
       if line =~ EMPTY_LINE
         lines_empty.push(line)
         next
-        end
+      end
 
       if line =~ comment_start
         comment_level += 1
