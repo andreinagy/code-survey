@@ -1,5 +1,6 @@
 require 'find'
 require_relative 'languages/swift'
+require_relative 'helpers.rb'
 
 class ShellAdapter
   def self.analyze(options)
@@ -47,64 +48,7 @@ class FilesParser
 
     files.each do |file|
       partial = parse_file(file, language)
-      result = mergeSumShallowHashes(result, partial)
-    end
-    result
-  end
-
-  def occurences_hash(line, keywords)
-    result = {}
-    keywords.map do |category, sub_hash|
-      partial = {}
-      sub_hash.map do |keyword, regex|
-        # partial[k] = 0 if partial[k].nil?
-        regexp = Regexp.new(keyword)
-        value = line =~ regexp ? 1 : 0
-        partial[keyword] = value unless value.zero?
-        # puts "partial --------"
-        # puts regex
-        # puts line =~ regex
-        # puts value
-        # puts line
-        # puts keyword
-        # puts partial[keyword]
-      end
-      result[category] = partial unless partial.empty?
-    end
-    # puts "occurences_hash result"
-    # puts result
-    result
-  end
-
-  #
-  # This works only if there are no nested values.
-  # Needs same schema
-  def mergeSumShallowHashes(h1, h2)
-    result = {}
-    h1.each do |key, value|
-      # hash
-      if value.is_a?(::Hash) && h2[key].is_a?(::Hash)
-        result[key] = mergeSumShallowHashes(value, h2[key])
-      elsif value.is_a?(::Hash)
-        result[key] = value
-
-      #common values
-      elsif value.is_a?(Numeric) && h2[key].is_a?(Numeric)
-        result[key] = value + h2[key]
-      elsif h1[key].is_a?(Numeric)
-        result[key] = value
-      end
-    end
-
-    h2.each do |key, value|
-      # checked common items above.
-      if value.is_a?(::Hash)
-        result[key] = value
-      
-        #next values
-      elsif value.is_a?(Numeric) && !h1[key].is_a?(Numeric)
-        result[key] = value
-      end
+      result = mergedWithSumOfValues(result, partial)
     end
     result
   end
@@ -118,7 +62,7 @@ class FilesParser
     # result = hashes.inject { |memo, el| memo.merge(el) { |_k, old_v, new_v| old_v + new_v } }
     result = {}
     hashes.each do |partial|
-      result = mergeSumShallowHashes(result, partial)
+      result = mergedWithSumOfValues(result, partial)
     end
     puts result
     puts '--------'
