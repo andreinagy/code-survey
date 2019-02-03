@@ -1,8 +1,9 @@
 import UIKit
 
-typealias SomeTypeAlias = Double
-
-enum SomeEnum {
+typealias SomeTypeAlias = Double  /* multiple line comment
+/* nested
+*/ code mixed with comments are counted as comments.. nandrei?
+*/ enum SomeEnum {
     
 }
 
@@ -10,6 +11,7 @@ class SomeClass {
     
 }
 
+// Single line comment
 struct SomeStruct {
     
     init?() {

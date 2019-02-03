@@ -1,51 +1,62 @@
 SWIFT_LANGUAGE = {
+  # nandrei this should be an array, for objC or c++, .h, .m, etc..
   file_extension: 'swift',
 
-  # keywords that denote architecture refinement
-  types: [
-    'class ',
-    'struct ',
-    'enum ',
-    'protocol ',
-    'typealias '
-  ],
+  comments: {
+    line_single: '//',
+    line_multi: {
+      start: '/\*',
+      end: '\*/'
+    }
+  },
 
-  # keywords that denote structuring code
-  functions: [
-    'func ',
-    '{ (' # closure
-  ],
+  keywords: {
+    # keywords that denote architecture refinement
+    types: [
+      'class ',
+      'struct ',
+      'enum ',
+      'protocol ',
+      'typealias '
+    ],
 
-  # keywords that denote code branching
-  complexity: [
-    'if ',
-    'guard ',
-    'switch ',
-    ' ? ', # ternary operator
-  ],
+    # keywords that denote structuring code
+    functions: [
+      'func ',
+      '\{ \(' # closure with arguments.
+    ],
 
-  # keywords that denote good practices
-  keywords_positive: [
-    'init?(',
-    'init() throws',
-    'extension',
-    'forEach',
-    'map',
-    ' in ', # fast enumerations and closures
-    'self]', # weak and unowned
-    ' ?? ',
-    'assert(',
-    'fatalError('
-  ],
+    # keywords that denote code branching
+    complexity: [
+      'if ',
+      'guard ',
+      'switch ',
+      ' ? ', # ternary operator
+    ],
 
-  # keywords that denote bad practices
-  keywords_negative: [
-    '! ', # force unwrap, downcasting
-    ' shared', # singletons
-    'DispatchQueue.main', # uses delays to layout views?
-    'TODO',
-    'FIXME',
-    'TBD',
-    'HACK'
-  ]
+    # keywords that denote good practices
+    good: [
+      'init?\(',
+      'init() throws',
+      'extension',
+      'forEach',
+      'map',
+      ' in ', # fast enumerations and closures
+      'self\]', # weak and unowned
+      ' ?? ',
+      'assert\(',
+      'fatalError\('
+    ],
+
+    # keywords that denote bad practices
+    bad: [
+      '! ', # force unwrap, downcasting
+      ' shared', # singletons
+      'DispatchQueue.main', # uses delays to layout views?
+      'TODO',
+      'FIXME',
+      'TBD',
+      'HACK'
+    ]
+  }
 }.freeze
