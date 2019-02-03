@@ -26,14 +26,14 @@ HASH2_NESTED = {
 
 class MergeHashesTest < Minitest::Test
   def test_hashes_strings_merging
-    result = mergedWithSumOfValues(HASH1, HASH2)
+    result = merged_hashes_numeric_sum(HASH1, HASH2)
 
     assert result['hash1_unique_non_numeric'] == 'value1'
     assert result['hash2_unique_non_numeric'] == 'value2'
   end
 
   def test_hashes_numeric_merging
-    result = mergedWithSumOfValues(HASH1, HASH2)
+    result = merged_hashes_numeric_sum(HASH1, HASH2)
 
     assert result['value1'] == 1
     assert result['value2'] == 2
@@ -41,7 +41,7 @@ class MergeHashesTest < Minitest::Test
   end
 
   def test_hashes_nested_merging
-    result = mergedWithSumOfValues(HASH1_NESTED, HASH2_NESTED)
+    result = merged_hashes_numeric_sum(HASH1_NESTED, HASH2_NESTED)
 
     assert result['nested']['value1'] == 1
     assert result['nested']['value2'] == 2

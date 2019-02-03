@@ -1,14 +1,19 @@
 
 EXECUTABLE_NAME = 'code-survey'.freeze
 
+def regexp_value(line, keyword)
+  regexp = Regexp.new(keyword)
+  value = line =~ regexp ? 1 : 0
+  value > 0 ? value : nil
+end
+
 def occurences_hash(line, keywords)
   result = {}
   keywords.map do |category, sub_hash|
     partial = {}
     sub_hash.map do |keyword, _regex|
-      regexp = Regexp.new(keyword)
-      value = line =~ regexp ? 1 : 0
-      partial[keyword] = value unless value.zero?
+      value = regexp_value(line, keyword)
+      partial[keyword] = value unless value.nil?
     end
     result[category] = partial unless partial.empty?
   end
@@ -19,7 +24,7 @@ def value(value, other_value)
   return value if other_value.nil?
   # nested hashes
   if value.is_a?(::Hash) && other_value.is_a?(::Hash)
-    mergedWithSumOfValues(value, other_value)
+    merged_hashes_numeric_sum(value, other_value)
 
   # numeric values
   elsif value.is_a?(Numeric) && other_value.is_a?(Numeric)
@@ -30,7 +35,7 @@ end
 #
 # This works only if there are no nested values.
 # Needs same schema
-def mergedWithSumOfValues(hash_first, hash_second)
+def merged_hashes_numeric_sum(hash_first, hash_second)
   result = {}
   hash_first.each do |key, value|
     other_value = hash_second[key]
@@ -50,7 +55,7 @@ def all_occurences_hash(lines, keywords)
   end
   result = {}
   hashes.compact.each do |partial|
-    result = mergedWithSumOfValues(result, partial)
+    result = merged_hashes_numeric_sum(result, partial)
   end
   result.empty? ? nil : result
 end

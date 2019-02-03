@@ -48,7 +48,7 @@ class FilesParser
 
     files.each do |file|
       partial = parse_file(file, language)
-      result = mergedWithSumOfValues(result, partial)
+      result = merged_hashes_numeric_sum(result, partial)
     end
     result
   end
@@ -57,13 +57,20 @@ class FilesParser
   def parse_file(file, language)
     comment_level = 0 # process comments in comments too, why not?
 
-    lines_comment = [] # Lines that contain comments. Empty or not. Closing comment line is not handled as code further.
-    lines_empty = [] # Empty lines that are not included in comments.
-    lines_code = [] # All lines that are not empty and not included in comments.
+    # Lines that contain comments. Empty or not. Closing comment line is not handled as code further.
+    lines_comment = [] 
+
+     # Empty lines that are not included in comments.
+    lines_empty = []
+
+     # All lines that are not empty and not included in comments.
+    lines_code = []
 
     comment_single = Regexp.new(language[:comments][:line_single]).freeze
     comment_start = Regexp.new(language[:comments][:line_multi][:start]).freeze
-    comment_end = Regexp.new(language[:comments][:line_multi][:end]).freeze # this would crash for single line only languages?
+
+    # this would crash for single line only languages?
+    comment_end = Regexp.new(language[:comments][:line_multi][:end]).freeze 
 
     File.open(file).each do |line|
       if line =~ EMPTY_LINE
@@ -100,8 +107,10 @@ class FilesParser
       'linesOfCode' => lines_code.count,
       'linesOfComments' => lines_comment.count,
       'linesEmpty' => lines_empty.count,
-      'keywords_comments' => all_occurences_hash(lines_comment, language[:keywords_comments]),
-      'keywords_code' => all_occurences_hash(lines_code, language[:keywords_code])
+      'keywords_comments' => all_occurences_hash(lines_comment,
+                                                 language[:keywords_comments]),
+      'keywords_code' => all_occurences_hash(lines_code,
+                                             language[:keywords_code])
     }
   end
 end
