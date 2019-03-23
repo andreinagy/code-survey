@@ -11,7 +11,7 @@ module Main
       'date' => options.scan_date,
       'anonymized' => options.anonymize,
       'directory' => options.input_directory,
-      'ignore' => options.ignore_list
+      'ignore' => options.ignore_regex_string
     }
   end
   private_class_method :executable_hash

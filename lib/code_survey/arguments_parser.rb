@@ -4,7 +4,7 @@ require_relative 'helpers'
 
 # https://docs.ruby-lang.org/en/2.1.0/OptionParser.html
 Options = Struct.new(:anonymize,
-                     :ignore_list,
+                     :ignore_regex_string,
                      :scan_date,
                      :input_directory)
 
@@ -47,11 +47,10 @@ class Parser
         result.scan_date = v
       end
 
-      o.on('-i',
-           '--ignore x,y,z',
-           Array,
-           'Ignore files that contain text in path (Eg. Cocoapods, test)') do |list|
-        result.ignore_list = list
+      o.on('-iIGNORE',
+           '--ignore-regex=IGNORE',
+           'Case sensitive ignore files regex. Eg. "Ignore|Debug"') do |v|
+        result.ignore_regex_string = v
       end
     end
 

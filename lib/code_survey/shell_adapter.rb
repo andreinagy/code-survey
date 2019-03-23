@@ -5,7 +5,7 @@ require_relative 'helpers.rb'
 
 class ShellAdapter
   def self.analyze(options)
-    file_parser = FilesParser.new(options.ignore_list,
+    file_parser = FilesParser.new(options.ignore_regex_string,
                                   options.input_directory)
 
     [
@@ -21,14 +21,14 @@ end
 EMPTY_LINE = /\A\s*\Z/
 
 class FilesParser
-  def initialize(ignore_list, input_directory)
-    @ignore_list = ignore_list
+  def initialize(ignore_regex_string, input_directory)
+    @ignore_regex_string = ignore_regex_string
     @input_directory = input_directory
   end
 
   def analyze(language)
     extension = Regexp.new(".#{language[:file_extension]}$").freeze
-    parse_files(find_files(@ignore_list, @input_directory, extension), language)
+    parse_files(find_files(@ignore_regex_string, @input_directory, extension), language)
   end
 
   def parse_files(files, language)
@@ -66,6 +66,7 @@ class FilesParser
     # this would crash for single line only languages?
     comment_end = Regexp.new(language[:comments][:line_multi][:end]).freeze
 
+    # puts file
     File.open(file).each do |line|
       if line =~ EMPTY_LINE
         lines_empty.push(line)

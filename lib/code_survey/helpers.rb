@@ -3,15 +3,17 @@ EXECUTABLE_NAME = 'code-survey'.freeze
 
 # Files
 
-def find_files(ignore_list, base_path, extension)
+def find_files(ignore_regex_string, base_path, extension)
   file_paths = []
+  ignore_regex = Regexp.new(ignore_regex_string) unless ignore_regex_string.nil?
   Find.find(base_path) do |path|
-    ignore_matches = (ignore_list || []).select do |item|
-      path.include? item
+    next if File.directory? path
+    next if path !~ extension
+    if ignore_regex
+      next if path =~ ignore_regex
     end
-    should_ignore = ignore_matches.any?
 
-    file_paths << path if path =~ extension && !should_ignore
+    file_paths << path
   end
   file_paths
 end
