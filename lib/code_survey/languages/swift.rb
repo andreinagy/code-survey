@@ -58,28 +58,47 @@ SWIFT_LANGUAGE = {
 
     # keywords that denote good practices
     potentially_good: [
-      'init?\(',
+      'weak',
+      'init\?\(',
       'init() throws',
+      'lazy',
       'extension',
       'forEach',
       'map',
+      'reduce',
+      'map',
       ' in ', # fast enumerations and closures
-      'self\]', # weak and unowned
+      '\[weak self\]', # weak and unowned
       ' \?\? ', # nil coalescing operator
       'assert\(',
-      'fatalError\('
+      'fatalError\(',
+      'Error'
     ],
 
     # keywords that are neither good or bad practice, but good to know about.
     potentially_neutral: [
-      '@objc'
+      'didSet',
+      'willSet',
+      'deinit',
+      '@IBOutlet',
+      '@IBAction',
+      '@objc',
+      '\[unowned self\]',
+      'DispatchQueue.main',
+      'NotificationCenter',
+      'UserDefaults'
     ],
 
     # keywords that denote bad practices
     potentially_bad: [
-      '! ', # force unwrap, downcasting
+      'self\.', # uses self even though it's not necessary.
+      ';', # uses semicolons even though it's not necessary.
+      'as!', # force unwrap, downcasting
+      'try!', # force unwrap, downcasting
       ' shared', # singletons
-      'DispatchQueue.main', # uses delays to layout views?
+      '\"\"', # empty strings
+      '\".+\"', # string literals
+      '[0-9]*\.?[0-9]+', # magic numbers
     ]
   }
 }.freeze

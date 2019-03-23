@@ -33,7 +33,7 @@ OBJC_LANGUAGE = {
   keywords_code: {
     # keywords that denote architecture refinement
     types: [
-      'implementation ',
+      'implementation ', # the implementation is unique
       'struct ',
       'NS_ENUM ',
       'protocol ',
@@ -42,8 +42,8 @@ OBJC_LANGUAGE = {
 
     # keywords that denote structuring code
     functions: [
-      '- \(.*\).*', # - (void)anyNumberOfCharacters
-      '\{ \(' # closure with arguments.
+      '[+-]\s?\([a-zA-Z]+?\)[a-zA-Z]+', # - (void)anyNumberOfCharacters
+      '\^\{' # closure with arguments.
     ],
 
     # keywords that denote code branching
@@ -62,21 +62,45 @@ OBJC_LANGUAGE = {
       'nonnull',
       '_Nullable',
       'nullable',
-      'extension',
+      'strong',
+      'weak',
+      '@interface\s[a-zA-Z]+\s\([a-zA-Z]*\)', # categories
       ' in ', # fast enumerations and closures
       'assert\(',
-      'fatalError\('
+      'NSAssert\(',
+      'NSError'
     ],
 
     # keywords that are neither good or bad practice, but good to know about.
     potentially_neutral: [
-      '@objc'
+      'NSNull',
+      'objc_setAssociatedObject',
+      'objc_getAssociatedObject',
+      'dispatch_async',
+      '@dynamic',
+      'performSelector:',
+      'NSClassFromString',
+      'NSSelectorFromString',
+      '#define',
+      'NSNotificationCenter',
+      'NSUserDefaults'
     ],
 
     # keywords that denote bad practices
     potentially_bad: [
       ' shared', # singletons
       'dispatch_', # uses delays to layout views?
+      'unsafe_unretained',
+
+      'true', # non Objective C bools.
+      'false', # non Objective C bools.
+      'TRUE', # non Objective C bools.
+      'FALSE', # non Objective C bools.
+
+      ' shared', # singletons
+      '@\"\"', # empty strings
+      '@\".+\"', # string literals
+      '[0-9]*\.?[0-9]+', # magic numbers
     ]
   }
 }.freeze
