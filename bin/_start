@@ -1,0 +1,2 @@
+#!/bin/sh
+code-survey -i ignore test/fixtures/
