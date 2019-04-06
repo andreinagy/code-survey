@@ -1,2 +1,2 @@
 #!/bin/sh
-code-survey -i ignore test/fixtures/
+./bin/code-survey -i ignore test/fixtures/
