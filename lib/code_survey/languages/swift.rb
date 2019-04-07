@@ -66,7 +66,6 @@ SWIFT_LANGUAGE = {
       'forEach',
       'map',
       'reduce',
-      'map',
       ' in ', # fast enumerations and closures
       '\[weak self\]', # weak and unowned
       ' \?\? ', # nil coalescing operator
