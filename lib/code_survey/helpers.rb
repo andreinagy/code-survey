@@ -76,5 +76,12 @@ def all_occurences_hash(lines, keywords)
   hashes.compact.each do |partial|
     result = merged_hashes_numeric_sum(result, partial)
   end
+  
+  # add total
+  result.each do |key, value|
+    section = result[key]
+    section[:total] = section.inject(0) { |sum, tuple| sum += tuple[1] }
+  end
+
   result.empty? ? nil : result
 end
