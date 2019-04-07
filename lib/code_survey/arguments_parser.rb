@@ -3,17 +3,20 @@ require 'time'
 require_relative 'helpers'
 
 # https://docs.ruby-lang.org/en/2.1.0/OptionParser.html
-Options = Struct.new(:anonymize,
+Options = Struct.new(
                      :ignore_regex_string,
                      :scan_date,
+                     :json_output,
+                     :per_thousand_lines_of_code,
                      :input_directory)
 
 # Parses the command line arguments
 class Parser
   def self.default_options
     result = Options.new
-    result.anonymize = false
     result.scan_date = Time.now.iso8601(3)
+    result.json_output = false
+    result.per_thousand_lines_of_code = false
     result.input_directory = '.'
     result
   end
@@ -35,12 +38,6 @@ class Parser
         exit 0
       end
 
-      o.on('-a',
-           '--anonymize',
-           "Anonymizes the output (#{result.anonymize})") do |v|
-        result.anonymize = v
-      end
-
       o.on('-tTODAY',
            '--today=TODAY',
            "Today's date for testing purposes (string)") do |v|
@@ -52,6 +49,15 @@ class Parser
            'Case sensitive ignore files regex. Eg. "Ignore|Debug"') do |v|
         result.ignore_regex_string = v
       end
+
+      o.on("--json", "Output in JSON format") do |v|
+        result.json_output = v
+      end
+
+      o.on("--per-thoudsand-lines", "Output counts/1000 lines of code") do |v|
+        result.per_thousand_lines_of_code = v
+      end
+
     end
 
     begin
