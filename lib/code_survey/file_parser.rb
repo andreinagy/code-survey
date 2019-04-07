@@ -15,9 +15,9 @@ class FilesParser
     return nil if files.empty?
 
     result = {
-      :name => language[:name],
-      :fileExtension => language[:file_extension],
-      :files => files.count || 0
+      name: language[:name],
+      fileExtension: language[:file_extension],
+      files: files.count || 0
     }
 
     files.each do |file|
@@ -82,9 +82,9 @@ class FilesParser
     end
 
     result = {
-      :linesOfCode => lines_code.count,
-      :linesOfComments => lines_comment.count,
-      :linesEmpty => lines_empty.count
+      linesOfCode: lines_code.count,
+      linesOfComments: lines_comment.count,
+      linesEmpty: lines_empty.count
     }
     comments = all_occurences_hash(lines_comment,
                                    language[:keywords_comments])

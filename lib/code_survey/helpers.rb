@@ -34,7 +34,7 @@ def occurences_hash(line, keywords)
       value = regexp_value(line, keyword)
       partial[keyword] = value unless value.nil?
     end
-    result[category] = {:regexes => partial} unless partial.empty?
+    result[category] = { regexes: partial } unless partial.empty?
   end
   result.empty? ? nil : result
 end
@@ -90,12 +90,12 @@ def all_occurences_hash(lines, keywords)
 end
 
 def hash_with_totals(hash)
-  puts "add totals"
+  puts 'add totals'
   hash
 end
 
 def per_thousand_lines_of_code(hash)
-  puts "per thousand lines"
+  puts 'per thousand lines'
   hash
 end
 
@@ -108,28 +108,27 @@ def tab_separated_values(hash)
   totals_hash = make_empty_totals_hash
 
   hash[:languages].each do |language_hash|
-
     code_hash = {}
     language_hash[:keywords_code].each do |key, value|
       code_hash[key] = value[:total]
     end
 
     language_line_hash = {
-      :name => language_hash[:name], 
-      :files => language_hash[:files] || 0,
-      :linesEmpty => language_hash[:linesEmpty] || 0,
-      :linesOfComments => language_hash[:linesOfComments] || 0,
-      :linesOfCode => language_hash[:linesOfCode] || 0,
-      :types => code_hash[:types] || 0,
-      :functions => code_hash[:functions] || 0,
-      :complexity => code_hash[:complexity] || 0,
-      :potentially_good => code_hash[:potentially_good] || 0,
-      :potentially_neutral => code_hash[:potentially_neutral] || 0,
-      :potentially_bad => code_hash[:potentially_bad] || 0
+      name: language_hash[:name],
+      files: language_hash[:files] || 0,
+      linesEmpty: language_hash[:linesEmpty] || 0,
+      linesOfComments: language_hash[:linesOfComments] || 0,
+      linesOfCode: language_hash[:linesOfCode] || 0,
+      types: code_hash[:types] || 0,
+      functions: code_hash[:functions] || 0,
+      complexity: code_hash[:complexity] || 0,
+      potentially_good: code_hash[:potentially_good] || 0,
+      potentially_neutral: code_hash[:potentially_neutral] || 0,
+      potentially_bad: code_hash[:potentially_bad] || 0
     }
 
-      totals_hash = merged_hashes_numeric_sum(totals_hash, language_line_hash)
-      totals_hash[:name] = 'total'
+    totals_hash = merged_hashes_numeric_sum(totals_hash, language_line_hash)
+    totals_hash[:name] = 'total'
 
     result.push(tab_joined_hash(language_line_hash))
   end
@@ -139,49 +138,50 @@ def tab_separated_values(hash)
   result
 end
 
-def tab_joined_header()
-  tab_joined_array(['Language', 
-  'files', 
-  'blank', 
-  'comment', 
-  'code',  
-  'types', 
-  'functions',  
-  'complexity',  
-  'potentially_good', 
-  'potentially_neutral', 
-  'potentially_bad'])
+def tab_joined_header
+  tab_joined_array(%w[Language
+                      files
+                      blank
+                      comment
+                      code
+                      types
+                      functions
+                      complexity
+                      potentially_good
+                      potentially_neutral
+                      potentially_bad])
 end
 
-def make_empty_totals_hash()
+def make_empty_totals_hash
   language_line_hash = {
-    :name => 'total', 
-    :files => 0,
-    :linesEmpty => 0,
-    :linesOfComments => 0,
-    :linesOfCode => 0,
-    :types => 0,
-    :functions => 0,
-    :complexity => 0,
-    :potentially_good => 0,
-    :potentially_neutral => 0,
-    :potentially_bad => 0
+    name: 'total',
+    files: 0,
+    linesEmpty: 0,
+    linesOfComments: 0,
+    linesOfCode: 0,
+    types: 0,
+    functions: 0,
+    complexity: 0,
+    potentially_good: 0,
+    potentially_neutral: 0,
+    potentially_bad: 0
   }
 end
 
 def tab_joined_hash(language_line_hash)
   tab_joined_array([
-    language_line_hash[:name], 
-    language_line_hash[:files],
-    language_line_hash[:linesEmpty],
-    language_line_hash[:linesOfComments],
-    language_line_hash[:linesOfCode],
-    language_line_hash[:types],
-    language_line_hash[:functions],
-    language_line_hash[:complexity],
-    language_line_hash[:potentially_good],
-    language_line_hash[:potentially_neutral],
-    language_line_hash[:potentially_bad]])
+                     language_line_hash[:name],
+                     language_line_hash[:files],
+                     language_line_hash[:linesEmpty],
+                     language_line_hash[:linesOfComments],
+                     language_line_hash[:linesOfCode],
+                     language_line_hash[:types],
+                     language_line_hash[:functions],
+                     language_line_hash[:complexity],
+                     language_line_hash[:potentially_good],
+                     language_line_hash[:potentially_neutral],
+                     language_line_hash[:potentially_bad]
+                   ])
 end
 
 def tab_joined_array(array)

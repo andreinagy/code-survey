@@ -4,12 +4,13 @@ require_relative 'helpers'
 
 # https://docs.ruby-lang.org/en/2.1.0/OptionParser.html
 Options = Struct.new(
-                     :ignore_regex_string,
-                     :scan_date,
-                     :add_totals,
-                     :json_output,
-                     :per_thousand_lines_of_code,
-                     :input_directory)
+  :ignore_regex_string,
+  :scan_date,
+  :add_totals,
+  :json_output,
+  :per_thousand_lines_of_code,
+  :input_directory
+)
 
 # Parses the command line arguments
 class Parser
@@ -52,18 +53,17 @@ class Parser
         result.ignore_regex_string = v
       end
 
-      o.on("--json", "Output in JSON format") do |v|
+      o.on('--json', 'Output in JSON format') do |v|
         result.json_output = v
       end
 
-      o.on("--totals", "Add totals") do |v|
+      o.on('--totals', 'Add totals') do |v|
         result.add_totals = v
       end
 
-      o.on("--per-thousand-lines", "Output counts/1000 lines of code") do |v|
+      o.on('--per-thousand-lines', 'Output counts/1000 lines of code') do |v|
         result.per_thousand_lines_of_code = v
       end
-
     end
 
     begin

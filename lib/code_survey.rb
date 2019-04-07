@@ -8,12 +8,12 @@ require 'code_survey/helpers.rb'
 module Main
   def self.executable_hash(options)
     {
-      :date => options.scan_date,
-      :json_output => options.json_output,
-      :add_totals => options.add_totals, #nandrei needs implementation
-      :per_thousand_lines_of_code => options.per_thousand_lines_of_code, #nandrei needs implementation
-      :directory => options.input_directory,
-      :ignore => options.ignore_regex_string
+      date: options.scan_date,
+      json_output: options.json_output,
+      add_totals: options.add_totals, # nandrei needs implementation
+      per_thousand_lines_of_code: options.per_thousand_lines_of_code, # nandrei needs implementation
+      directory: options.input_directory,
+      ignore: options.ignore_regex_string
     }
   end
   private_class_method :executable_hash
