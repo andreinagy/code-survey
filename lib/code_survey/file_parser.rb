@@ -1,4 +1,4 @@
-EMPTY_LINE = /\A\s*\Z/
+EMPTY_LINE = /\A\s*\Z/.freeze
 
 class FilesParser
   def initialize(ignore_regex_string, input_directory)
@@ -48,6 +48,9 @@ class FilesParser
 
     # puts file
     File.open(file).each do |line|
+      # file_parser.rb:52:in `=~': invalid byte sequence in UTF-8 (ArgumentError)
+      next unless line.valid_encoding?
+
       if line =~ EMPTY_LINE
         lines_empty.push(line)
         next
@@ -85,7 +88,7 @@ class FilesParser
     }
     comments = all_occurences_hash(lines_comment,
                                    language[:keywords_comments])
-        result['keywords_comments'] = comments unless comments.nil?
+    result['keywords_comments'] = comments unless comments.nil?
 
     code = all_occurences_hash(lines_code,
                                language[:keywords_code])

@@ -1,5 +1,3 @@
-
-
 # TODO: should replace plain regexes with patterns so more descriptive json can be output.
 class Pattern
   attr_accessor :key, :regex_string, :triggering_examples, :non_trigerring_examples

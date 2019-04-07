@@ -38,8 +38,8 @@ RUBY_LANGUAGE = {
 
     # keywords that denote structuring code
     functions: [
-      'def ',
-    #   '\{' # lambdas can't be distinguished
+      'def '
+      #   '\{' # lambdas can't be distinguished
     ],
 
     # keywords that denote code branching
@@ -47,27 +47,27 @@ RUBY_LANGUAGE = {
       'if ',
       'unless ',
       'case ', # switch
-      ' \? ', # ternary operator
+      ' \? ' # ternary operator
     ],
 
     # heavily oppinionated
 
     # keywords that denote good practices
-    potentially_good: [
-      'freeze',
-      'map',
-      'reduce',
-      'inject',
+    potentially_good: %w[
+      freeze
+      map
+      reduce
+      inject
     ],
 
     # keywords that are neither good or bad practice, but good to know about.
     potentially_neutral: [
-      'puts',
+      'puts'
     ],
 
     # keywords that denote bad practices
     potentially_bad: [
-      'return', # uses return instead of knowing the last value in a method is returned.
+      'return' # uses return instead of knowing the last value in a method is returned.
     ]
   }
 }.freeze

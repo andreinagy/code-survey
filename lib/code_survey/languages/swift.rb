@@ -51,7 +51,7 @@ SWIFT_LANGUAGE = {
       'if ',
       'guard ',
       'switch ',
-      ' \? ', # ternary operator
+      ' \? ' # ternary operator
     ],
 
     # heavily oppinionated
@@ -97,7 +97,7 @@ SWIFT_LANGUAGE = {
       ' shared', # singletons
       '\"\"', # empty strings
       '\".+\"', # string literals
-      '[0-9]*\.?[0-9]+', # magic numbers
+      '[0-9]*\.?[0-9]+' # magic numbers
     ]
   }
 }.freeze

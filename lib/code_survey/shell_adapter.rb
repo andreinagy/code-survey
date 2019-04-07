@@ -23,5 +23,3 @@ class ShellAdapter
       .compact
   end
 end
-
-

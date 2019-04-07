@@ -1,4 +1,3 @@
-
 EXECUTABLE_NAME = 'code-survey'.freeze
 
 # Files
@@ -9,6 +8,7 @@ def find_files(ignore_regex_string, base_path, extension)
   Find.find(base_path) do |path|
     next if File.directory? path
     next if path !~ extension
+
     if ignore_regex
       next if path =~ ignore_regex
     end
@@ -41,6 +41,7 @@ end
 
 def value(value, other_value)
   return value if other_value.nil?
+
   # nested hashes
   if value.is_a?(::Hash) && other_value.is_a?(::Hash)
     merged_hashes_numeric_sum(value, other_value)
@@ -76,9 +77,9 @@ def all_occurences_hash(lines, keywords)
   hashes.compact.each do |partial|
     result = merged_hashes_numeric_sum(result, partial)
   end
-  
+
   # add total
-  result.each do |key, value|
+  result.each do |key, _value|
     section = result[key]
     section[:total] = section.inject(0) { |sum, tuple| sum += tuple[1] }
   end
