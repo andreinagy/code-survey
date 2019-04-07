@@ -1,5 +1,6 @@
 EXECUTABLE_NAME = 'code-survey'.freeze
 TOTAL = 'total'.freeze
+TAB = "\t".freeze
 
 # Files
 
@@ -103,8 +104,36 @@ def hash_with_totals(hash)
 end
 
 def per_thousand_lines_of_code(hash)
-  puts 'per thousand lines'
+  hash[:languages].each do |language_hash|
+    thousands_lines = language_hash[:linesOfCode] / 1000.0
+
+    recursively_divide_hash(language_hash, thousands_lines)
+
+    # fix value of :linesOfCode
+    language_hash[:linesOfCode] = thousands_lines
+  end
+
+  # unless hash[:total].nil?
+  #   puts hash[:total]
+  #   totals_hash = language_line_hash(hash[:total])
+  #   thousands_lines = totals_hash[:linesOfCode] / 1000
+  #   recursively_divide_all_numeric_values(totals_hash, thousands_lines)
+  # end
   hash
+end
+
+def recursively_divide_hash(hash, thousands_lines)
+  hash.each do |key, value|
+    if value.class == Numeric
+      hash[key] == value / thousands_lines
+      next
+    end
+
+    if value.class == Hash
+      recursively_divide_hash(hash[key], thousands_lines)
+      next
+    end
+  end
 end
 
 # Tab separated output
@@ -213,5 +242,5 @@ def tab_joined_hash(language_line_hash)
 end
 
 def tabs_joined_string(array)
-  array.join("\t")
+  array.join(TAB)
 end
