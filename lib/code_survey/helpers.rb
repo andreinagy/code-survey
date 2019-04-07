@@ -57,6 +57,9 @@ end
 # Needs same schema
 def merged_hashes_numeric_sum(hash_first, hash_second)
   result = {}
+  return hash_first if hash_second.nil?
+  return hash_second if hash_first.nil?
+
   hash_first.each do |key, value|
     other_value = hash_second[key]
     result[key] = value(value, other_value)

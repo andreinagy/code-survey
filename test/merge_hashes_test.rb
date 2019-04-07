@@ -47,4 +47,36 @@ class MergeHashesTest < Minitest::Test
     assert result['nested']['value2'] == 2
     assert result['nested']['value1'] == 1
   end
+
+  def test_hashes_nil_values
+    hash1 = {'key1' => 1, 'key2' => 2}
+    hash2 = {'key1' => 3}
+
+    result = merged_hashes_numeric_sum(hash1, hash2)
+    assert result['key1'] == 4
+    assert result['key2'] == 2
+  end
+
+  def test_hashes_nil_values_reversed
+    hash1 = {'key1' => 1, 'key2' => 2}
+    hash2 = {'key1' => 3}
+
+    result = merged_hashes_numeric_sum(hash2, hash1)
+    assert result['key1'] == 4
+    assert result['key2'] == 2
+  end
+
+  def test_merge_with_nil
+    hash1 = {'key1' => 1, 'key2' => 2}
+    result = merged_hashes_numeric_sum(hash1, nil)
+    assert result['key1'] == 1
+    assert result['key2'] == 2
+  end
+
+  def test_merge_with_empty
+    hash1 = {'key1' => 1, 'key2' => 2}
+    result = merged_hashes_numeric_sum(hash1, {})
+    assert result['key1'] == 1
+    assert result['key2'] == 2
+  end
 end

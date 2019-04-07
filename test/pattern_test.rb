@@ -16,7 +16,7 @@ class PatternTest < Minitest::Test
     assert pattern.matches('line not matching expected somewhere') == false
   end
 
-  def test_pattern_does_not_match
+  def test_pattern_does_not_match_
     pattern = self.class.make_default_pattern
 
     assert pattern.matches('line containing regex somewhere') == true
