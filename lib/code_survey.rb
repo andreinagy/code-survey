@@ -10,8 +10,8 @@ module Main
     {
       date: options.scan_date,
       json_output: options.json_output,
-      add_totals: options.add_totals, # nandrei needs implementation
-      per_thousand_lines_of_code: options.per_thousand_lines_of_code, # nandrei needs implementation
+      add_totals: options.add_totals,
+      per_thousand_lines_of_code: options.per_thousand_lines_of_code,
       directory: options.input_directory,
       ignore: options.ignore_regex_string
     }
@@ -34,6 +34,8 @@ module Main
       puts tab_separated_values(result)
     end
 
+    puts "nandrei totals per 1000 lines don't work well."
+    puts "nandrei verify counts per language"
     exit 0
   end
 end

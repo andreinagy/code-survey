@@ -104,36 +104,47 @@ def hash_with_totals(hash)
 end
 
 def per_thousand_lines_of_code(hash)
+  mutated_hash = {}
+  mutated_hash[:languages] = []
+
   hash[:languages].each do |language_hash|
     thousands_lines = language_hash[:linesOfCode] / 1000.0
 
-    recursively_divide_hash(language_hash, thousands_lines)
+    new_hash = recursively_divide_hash_numbers(language_hash, thousands_lines)
+    new_hash[:linesOfCode] = thousands_lines
+    mutated_hash[:languages] << new_hash
 
-    # fix value of :linesOfCode
-    language_hash[:linesOfCode] = thousands_lines
   end
+  hash[:languages] = mutated_hash[:languages]
 
-  # unless hash[:total].nil?
-  #   puts hash[:total]
-  #   totals_hash = language_line_hash(hash[:total])
-  #   thousands_lines = totals_hash[:linesOfCode] / 1000
-  #   recursively_divide_all_numeric_values(totals_hash, thousands_lines)
-  # end
+  unless hash[:total].nil?
+    totals_hash = hash[:total]
+    thousands_lines = totals_hash[:linesOfCode] / 1000.0
+
+    new_hash = recursively_divide_hash_numbers(totals_hash, thousands_lines)
+    new_hash[:linesOfCode] = thousands_lines
+    mutated_hash[:total] = new_hash
+  end
+  hash[:total] = mutated_hash[:total]
+
   hash
 end
 
-def recursively_divide_hash(hash, thousands_lines)
+def recursively_divide_hash_numbers(hash, thousands_lines)
+  result = {}
   hash.each do |key, value|
-    if value.class == Numeric
-      hash[key] == value / thousands_lines
+    if value.class == Fixnum
+      result[key] = value / thousands_lines
       next
     end
 
     if value.class == Hash
-      recursively_divide_hash(hash[key], thousands_lines)
+      result[key] = recursively_divide_hash_numbers(value, thousands_lines)
       next
     end
+    result[key] = value
   end
+  result
 end
 
 # Tab separated output
@@ -198,9 +209,9 @@ end
 def tab_joined_header
   tabs_joined_string(%w[Language
                         Files
-                        Blank
-                        Comment
-                        Code
+                        Lines_blank
+                        Lines_comments
+                        Lines_code
                         Types
                         Functions
                         Complexity
