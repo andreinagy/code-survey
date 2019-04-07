@@ -6,6 +6,7 @@ require_relative 'helpers'
 Options = Struct.new(
                      :ignore_regex_string,
                      :scan_date,
+                     :add_totals,
                      :json_output,
                      :per_thousand_lines_of_code,
                      :input_directory)
@@ -15,6 +16,7 @@ class Parser
   def self.default_options
     result = Options.new
     result.scan_date = Time.now.iso8601(3)
+    result.add_totals = false
     result.json_output = false
     result.per_thousand_lines_of_code = false
     result.input_directory = '.'
@@ -46,7 +48,7 @@ class Parser
 
       o.on('-iIGNORE',
            '--ignore-regex=IGNORE',
-           'Case sensitive ignore files regex. Eg. "Ignore|Debug"') do |v|
+           'Case sensitive ignore files regex. Eg. "Pods|Test"') do |v|
         result.ignore_regex_string = v
       end
 
@@ -54,7 +56,11 @@ class Parser
         result.json_output = v
       end
 
-      o.on("--per-thoudsand-lines", "Output counts/1000 lines of code") do |v|
+      o.on("--totals", "Add totals") do |v|
+        result.add_totals = v
+      end
+
+      o.on("--per-thousand-lines", "Output counts/1000 lines of code") do |v|
         result.per_thousand_lines_of_code = v
       end
 
